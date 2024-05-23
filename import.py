@@ -10,7 +10,6 @@ if PAT == "..." or MAVEN_URL == "...":
     print("Please set the PAT and MAVEN_URL variables")
     exit(1)
 
-# Variables
 ORGANIZATION = MAVEN_URL.split("/")[3]
 FEED = MAVEN_URL.split("/")[6]
 PROJECT = MAVEN_URL.split("/")[4]
@@ -20,17 +19,11 @@ print(f"ORGANIZATION: {ORGANIZATION}")
 print(f"FEED: {FEED}")
 print(f"PROJECT: {PROJECT}")
 
-# Base64 encode the PAT
 destination_base64_pat = base64.b64encode(f":{PAT}".encode("ascii")).decode("ascii")
 
-# Directory where the downloaded packages are stored
-
-# Get the list of all .jar files in the output directory
 packages = glob.glob(os.path.join(OUTPUT, "*/*-*.jar"))
 
-# Upload each package to the destination feed
 for package_path in packages:
-    # Extract groupId, artifactId, and version from the file path
     _, groupId, artifact_file = package_path.split(os.sep)
     artifactId, version = artifact_file.rsplit('-', 1)
     version = version.rstrip('.jar')

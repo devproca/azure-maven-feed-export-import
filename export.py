@@ -10,7 +10,6 @@ if PAT == "..." or MAVEN_URL == "...":
     print("Please set the PAT and MAVEN_URL variables")
     exit(1)
 
-# Variables
 ORGANIZATION = MAVEN_URL.split("/")[3]
 FEED = MAVEN_URL.split("/")[6]
 PROJECT = MAVEN_URL.split("/")[4]
@@ -20,19 +19,15 @@ print(f"ORGANIZATION: {ORGANIZATION}")
 print(f"FEED: {FEED}")
 print(f"PROJECT: {PROJECT}")
 
-# Base64 encode the PAT
 base64_pat = base64.b64encode(f":{PAT}".encode("ascii")).decode("ascii")
 
-# Create the output directory if it doesn't exist
 if not os.path.exists(OUTPUT):
     os.makedirs(OUTPUT)
 
-# Get the list of artifacts in the feed
 artifacts_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/Feeds/{FEED}/packages?api-version=7.1-preview.1"
 response = requests.get(artifacts_url, headers={"Authorization": f"Basic {base64_pat}"})
 packages = response.json()
 
-# Download each artifact
 for package in packages['value']:
     package_name = package['name']
     versions_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/packages/{package['id']}/versions?api-version=7.1-preview.1"
