@@ -4,8 +4,11 @@ import requests
 import base64
 
 PAT = "..."
-
 MAVEN_URL = "..."
+
+if PAT == "..." or MAVEN_URL == "...":
+    print("Please set the PAT and MAVEN_URL variables")
+    exit(1)
 
 # Variables
 ORGANIZATION = MAVEN_URL.split("/")[3]
@@ -16,10 +19,6 @@ OUTPUT = "output"
 print(f"ORGANIZATION: {ORGANIZATION}")
 print(f"FEED: {FEED}")
 print(f"PROJECT: {PROJECT}")
-
-if PAT == "..." or MAVEN_URL == "...":
-    print("Please set the PAT and MAVEN_URL variables")
-    exit(1)
 
 # Base64 encode the PAT
 base64_pat = base64.b64encode(f":{PAT}".encode("ascii")).decode("ascii")
