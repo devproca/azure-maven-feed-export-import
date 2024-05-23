@@ -9,9 +9,13 @@ MAVEN_URL = "..."
 
 # Variables
 ORGANIZATION = MAVEN_URL.split("/")[3]
-FEED = MAVEN_URL.split("/")[8]
-PROJECT = MAVEN_URL.split("/")[7]
+FEED = MAVEN_URL.split("/")[6]
+PROJECT = MAVEN_URL.split("/")[4]
 OUTPUT = "output"
+
+print(f"ORGANIZATION: {ORGANIZATION}")
+print(f"FEED: {FEED}")
+print(f"PROJECT: {PROJECT}")
 
 if PAT == "..." or MAVEN_URL == "...":
     print("Please set the PAT and MAVEN_URL variables")

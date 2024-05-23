@@ -5,13 +5,17 @@ import base64
 
 PAT = "..."  # Personal Access Token for the destination feed
 
-MAVEN_URL = "https://pkgs.dev.azure.com/GoSCSITDAMS/f0e2b52f-1224-44d6-b0ce-58508ab5f2a4/_packaging/JSS_Artifact_Feed/maven/v1"
+MAVEN_URL = "..."
 
 # Variables
 ORGANIZATION = MAVEN_URL.split("/")[3]
-FEED = MAVEN_URL.split("/")[8]
-PROJECT = MAVEN_URL.split("/")[7]
+FEED = MAVEN_URL.split("/")[6]
+PROJECT = MAVEN_URL.split("/")[4]
 OUTPUT = "output"
+
+print(f"ORGANIZATION: {ORGANIZATION}")
+print(f"FEED: {FEED}")
+print(f"PROJECT: {PROJECT}")
 
 if PAT == "..." or MAVEN_URL == "...":
     print("Please set the PAT and MAVEN_URL variables")
