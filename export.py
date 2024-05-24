@@ -41,17 +41,18 @@ for package in packages['value']:
         version_name = version['version']
         groupId = package_name.split(":")[0]
         artifactId = package_name.split(":")[1]
-        fileName = f"{artifactId}-{version_name}.jar"
-        download_url = f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/maven/{groupId}/{artifactId}/{version_name}/{fileName}/content?api-version=7.1-preview.1"
-        outname = f"{groupId}/{artifactId}-{version_name}.jar"
-        if not os.path.exists(os.path.join(OUTPUT, groupId)):
-            os.makedirs(os.path.join(OUTPUT, groupId))
+        for ext in ["jar", "pom"]:
+            fileName = f"{artifactId}-{version_name}.{ext}"
+            download_url = f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/maven/{groupId}/{artifactId}/{version_name}/{fileName}/content?api-version=7.1-preview.1"
+            outname = f"{groupId}/{artifactId}-{version_name}.{ext}"
+            if not os.path.exists(os.path.join(OUTPUT, groupId)):
+                os.makedirs(os.path.join(OUTPUT, groupId))
 
-        print(f"Downloading {package_name} version {version_name} from {download_url}")
-        response = requests.get(download_url, headers={"Authorization": f"Basic {base64_pat}"})
-        if response.status_code == 200:
-            with open(os.path.join(OUTPUT, outname), "wb") as f:
-                f.write(response.content)
-        else:
-            print(f"Failed to download {package_name} version {version_name} from {download_url}")
-            print(response.text)
+            print(f"Downloading {package_name} version {version_name} from {download_url}")
+            response = requests.get(download_url, headers={"Authorization": f"Basic {base64_pat}"})
+            if response.status_code == 200:
+                with open(os.path.join(OUTPUT, outname), "wb") as f:
+                    f.write(response.content)
+            else:
+                print(f"Failed to download {package_name} version {version_name} from {download_url}")
+                print(response.text)

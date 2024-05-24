@@ -30,13 +30,15 @@ for package_path in packages:
 
     print(f"Uploading {artifactId} version {version} of group {groupId}...")
 
-    fileName = f"{artifactId}-{version}.jar"
-    upload_url = f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_packaging/{FEED}/maven/v1/{groupId}/{artifactId}/{version}/{fileName}"
+    for ext in ["jar", "pom"]:
+        fileName = f"{artifactId}-{version}.{ext}"
+        upload_url = f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_packaging/{FEED}/maven/v1/{groupId}/{artifactId}/{version}/{fileName}"
 
-    with open(package_path, 'rb') as f:
-        upload_response = requests.put(upload_url, headers={"Authorization": f"Basic {destination_base64_pat}", "Content-Type": "application/octet-stream"}, data=f)
+        package_path = os.path.join(OUTPUT, groupId, fileName)
+        with open(package_path, 'rb') as f:
+            upload_response = requests.put(upload_url, headers={"Authorization": f"Basic {destination_base64_pat}", "Content-Type": "application/octet-stream"}, data=f)
 
-    if upload_response.status_code == 201:
-        print(f"Uploaded {artifactId} version {version} of group {groupId}")
-    else:
-        print(f"Failed to upload {artifactId} version {version} of group {groupId}. Status code: {upload_response.status_code}, Response: {upload_response.text}")
+        if upload_response.status_code == 201:
+            print(f"Uploaded {artifactId} version {version} of group {groupId}")
+        else:
+            print(f"Failed to upload {artifactId} version {version} of group {groupId}. Status code: {upload_response.status_code}, Response: {upload_response.text}")
