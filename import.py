@@ -49,7 +49,7 @@ packages = glob.glob(os.path.join(OUTPUT, "*/*-*.pom"))
 for package_path in packages:
     _, groupId, artifact_file = package_path.split(os.sep)
     artifactId, version = artifact_file.rsplit('-', 1)
-    version = version.rstrip('.jar')
+    version = version.rstrip('.pom')
 
     print(f"Uploading {artifactId} version {version} of group {groupId}...")
 
