@@ -52,7 +52,6 @@ def build_metadata(registry, manifest, tarball_data):
     root["dist-tags"][tag] = manifest["version"]
 
     tarball_name = f"{manifest['name']}-{manifest['version']}.tgz"
-    provenance_bundle_name = f"{manifest['name']}-{manifest['version']}.sigstore"
     tarball_uri = f"{manifest['name']}/-/{tarball_name}"
 
     sha1 = hashlib.sha1(tarball_data).hexdigest()
