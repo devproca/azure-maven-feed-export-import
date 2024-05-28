@@ -1,4 +1,4 @@
-# Azure Artifacts Maven Export & Import
+# Azure Artifacts Export & Import
 
 ## Personal Access Token
 
@@ -15,3 +15,14 @@
 5. Replace the URL in the file `export.py` or `import.py`
 
 Format: `https://pkgs.dev.azure.com/{org}/{project}/_packaging/{feed}/maven/v1`
+
+## Running the Script
+
+```bash
+python3 export.py # Export npm and maven
+python3 export.py npm # Export npm packages
+python3 export.py maven # Export maven packages
+
+python3 import.py npm # Import npm packages
+python3 import.py maven # Import maven packages
+```
