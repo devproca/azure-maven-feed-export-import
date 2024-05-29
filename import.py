@@ -89,7 +89,7 @@ else:
 
 for ext in exts:
     packages = glob.glob(os.path.join(OUTPUT, f"*/*-*.{ext}"))
-    for package_path in packages:
+    for i, package_path in enumerate(packages):
         _, groupId, artifact_file = package_path.split(os.sep)
         artifactId, version = artifact_file.rsplit("-", 1)
         version = version.rstrip(f".{ext}")
@@ -147,3 +147,8 @@ for ext in exts:
             print(
                 f"Failed to upload {artifactId} version {version} of group {groupId}. Status code: {upload_response.status_code}, Response: {upload_response.text}"
             )
+        progress = (i + 1) / len(packages) * 100
+        print(
+            f'\rProgress: [{"#" * int(progress // 4)}{" " * (25 - int(progress // 4))}] {int(progress)}%',
+            end="\r",
+        )

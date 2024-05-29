@@ -26,3 +26,12 @@ python3 export.py maven # Export maven packages
 python3 import.py npm # Import npm packages
 python3 import.py maven # Import maven packages
 ```
+
+## Nexus Export
+
+1. Replace the SOURCE_SERVER, SOURCE_USER, and SOURCE_PASSW in the file `nexus_export.py`
+2. Run the script
+
+```bash
+python3 nexus_export.py
+```

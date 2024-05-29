@@ -52,6 +52,8 @@ artifacts_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/pac
 response = requests.get(artifacts_url, headers={"Authorization": f"Basic {base64_pat}"})
 packages = response.json()
 
+download_queue = []
+
 for package in packages["value"]:
     package_name = package["name"]
     versions_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/packages/{package['id']}/versions?api-version=7.1-preview.1"
@@ -86,7 +88,7 @@ for package in packages["value"]:
                 outname = f"{groupId}/{artifactId}-{version_name}.{ext}"
                 if not os.path.exists(os.path.join(OUTPUT, groupId)):
                     os.makedirs(os.path.join(OUTPUT, groupId))
-                download(download_url, outname)
+                download_queue.append((download_url, outname))
         elif protocol == "npm":
             for ext in ["tgz"]:
                 fileName = f"{package_name}-{version_name}.{ext}"
@@ -94,8 +96,16 @@ for package in packages["value"]:
                 outname = f"npm/{package_name}-{version_name}.{ext}"
                 if not os.path.exists(os.path.join(OUTPUT, "npm")):
                     os.makedirs(os.path.join(OUTPUT, "npm"))
-                download(download_url, outname)
+                download_queue.append((download_url, outname))
         else:
             print(
                 f"Skipping unknown protocol {protocol} for {package_name} version {version_name}"
             )
+
+for i, (download_url, outname) in enumerate(download_queue):
+    download(download_url, outname)
+    progress = (i + 1) / len(urls) * 100
+    print(
+        f'\rProgress: [{"#" * int(progress // 4)}{" " * (25 - int(progress // 4))}] {int(progress)}%',
+        end="\r",
+    )
