@@ -3,11 +3,11 @@ import os
 import json
 import urllib.parse
 
-SOURCE_SERVER = ""
-SOURCE_USER = ""
-SOURCE_PASS = ""
+SOURCE_SERVER = "..."
+SOURCE_USER = "..."
+SOURCE_PASS = "..."
 
-if SOURCE_SERVER == "" or SOURCE_USER == "" or SOURCE_PASS == "":
+if SOURCE_SERVER == "..." or SOURCE_USER == "..." or SOURCE_PASS == "...":
     print("ERROR: Please provide Nexus credentials")
     exit(1)
 
