@@ -34,7 +34,7 @@ print(f"FEED: {FEED}")
 print(f"PROJECT: {PROJECT}")
 
 
-def build_metadata(registry, manifest, tarball_data):
+def build_npm_metadata(registry, manifest, tarball_data):
     default_tag = "latest"
     algorithms = ["sha512"]
 
@@ -107,7 +107,7 @@ for ext in exts:
             upload_url = f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_packaging/{FEED}/npm/registry/{groupId}{artifactId}"
             package_path = os.path.join(OUTPUT, parent_folder, fileName)
             with open(package_path, "rb") as f:
-                body = build_metadata(
+                body = build_npm_metadata(
                     f"https://pkgs.dev.azure.com/{ORGANIZATION}/{PROJECT}/_packaging/{FEED}/npm/registry",
                     {
                         "name": f"{groupId}{artifactId}",
