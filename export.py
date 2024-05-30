@@ -31,11 +31,9 @@ def download(url, outname):
     if response.status_code == 200:
         with open(os.path.join(OUTPUT, outname), "wb") as f:
             f.write(response.content)
-        print(f"Downloaded {package_name} version {version_name} to {outname}")
+        print(f"Downloaded {package_name} to {outname}")
     else:
-        print(
-            f"Failed to download {package_name} version {version_name} from {download_url}"
-        )
+        print(f"Failed to download {package_name} from {download_url}")
         print(response.text)
 
 
@@ -49,6 +47,15 @@ if not os.path.exists(OUTPUT):
     os.makedirs(OUTPUT)
 
 artifacts_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/Feeds/{FEED}/packages?api-version=7.1-preview.1"
+
+if len(FILTERS) == 1:
+    filter = FILTERS[0]
+    if filter == "npm":
+        filter = "Npm"
+    artifacts_url += f"&protocolType={filter}"
+
+artifacts_url += f"&directUpstreamId=00000000-0000-0000-0000-000000000000"
+
 response = requests.get(artifacts_url, headers={"Authorization": f"Basic {base64_pat}"})
 packages = response.json()
 
@@ -56,7 +63,7 @@ download_queue = []
 
 for package in packages["value"]:
     package_name = package["name"]
-    versions_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/packages/{package['id']}/versions?api-version=7.1-preview.1"
+    versions_url = f"https://feeds.dev.azure.com/{ORGANIZATION}/{PROJECT}/_apis/packaging/feeds/{FEED}/packages/{package['id']}/versions?api-version=7.1-preview.1&isDeleted=false"
     versions_response = requests.get(
         versions_url, headers={"Authorization": f"Basic {base64_pat}"}
     )
@@ -104,8 +111,8 @@ for package in packages["value"]:
 
 for i, (download_url, outname) in enumerate(download_queue):
     download(download_url, outname)
-    progress = (i + 1) / len(urls) * 100
+    progress = (i + 1) / len(download_queue) * 100
     print(
-        f'\rProgress: [{"#" * int(progress // 4)}{" " * (25 - int(progress // 4))}] {int(progress)}%',
+        f'Progress: [{"#" * int(progress // 4)}{" " * (25 - int(progress // 4))}] {int(progress)}%',
         end="\r",
     )
